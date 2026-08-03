@@ -1,0 +1,24 @@
+<section class="list-collections page-width">
+  <h1>{{ 'collections.general.all_categories' | t }}</h1>
+  <div class="list-collections__grid">
+    {% for collection in collections %}
+      <a href="{{ collection.url }}" class="list-collections__item">
+        <div class="list-collections__image-wrap">
+          {% if collection.featured_image %}
+            <img src="{{ collection.featured_image | image_url: width: 500 }}" alt="{{ collection.title | escape }}" loading="lazy" width="500" height="500">
+          {% else %}
+            <div class="list-collections__placeholder">🍯</div>
+          {% endif %}
+        </div>
+        <h2>{{ collection.title }}</h2>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Alle Kollektionen",
+  "settings": []
+}
+{% endschema %}

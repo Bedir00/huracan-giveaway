@@ -1,0 +1,30 @@
+<ul class="social-icons">
+  {% if settings.social_instagram_url != blank %}
+    <li>
+      <a href="{{ settings.social_instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_facebook_url != blank %}
+    <li>
+      <a href="{{ settings.social_facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_youtube_url != blank %}
+    <li>
+      <a href="{{ settings.social_youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"></rect><polygon points="10 9 15 12 10 15 10 9"></polygon></svg>
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_pinterest_url != blank %}
+    <li>
+      <a href="{{ settings.social_pinterest_url }}" target="_blank" rel="noopener" aria-label="Pinterest">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.5 17.5 12 8l2.2 2.2"></path></svg>
+      </a>
+    </li>
+  {% endif %}
+</ul>

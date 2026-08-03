@@ -1,0 +1,19 @@
+{%- comment -%}
+  Renders a price block for a product/variant.
+  Accepts: product (object)
+{%- endcomment -%}
+{%- liquid
+  assign target = product.selected_or_first_available_variant | default: product
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price
+-%}
+<div class="price {% if compare_at_price > price %}price--on-sale{% endif %}">
+  {% if compare_at_price > price %}
+    <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+    <span class="price__sale">{{ price | money }}</span>
+    <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+    <s class="price__compare">{{ compare_at_price | money }}</s>
+  {% else %}
+    <span class="price__regular">{{ price | money }}</span>
+  {% endif %}
+</div>

@@ -1,0 +1,53 @@
+{
+  "settings_schema": {
+    "colors": {
+      "name": "Farben",
+      "settings": {
+        "header_primary": { "content": "Markenfarben" },
+        "color_primary": { "label": "Honiggold (Primär)" },
+        "color_primary_dark": { "label": "Honiggold (dunkel / Hover)" },
+        "color_accent": { "label": "Akzent (Natur/Grün)" },
+        "header_neutral": { "content": "Neutrale Farben" },
+        "color_background": { "label": "Hintergrund" },
+        "color_surface": { "label": "Flächen / Karten" },
+        "color_text": { "label": "Text" },
+        "color_text_muted": { "label": "Text (gedämpft)" },
+        "color_border": { "label": "Rahmen" },
+        "color_sale": { "label": "Sale / Rabatt" }
+      }
+    },
+    "typography": {
+      "name": "Typografie",
+      "settings": {
+        "font_heading": { "label": "Schrift Überschriften" },
+        "font_body": { "label": "Schrift Fließtext" }
+      }
+    },
+    "layout": {
+      "name": "Layout",
+      "settings": {
+        "page_width": { "label": "Maximale Seitenbreite" },
+        "corner_style": {
+          "label": "Ecken-Stil",
+          "options__1": { "label": "Eckig" },
+          "options__2": { "label": "Abgerundet" }
+        }
+      }
+    },
+    "social": {
+      "name": "Social Media"
+    },
+    "favicon": {
+      "name": "Favicon",
+      "settings": {
+        "favicon": { "label": "Favicon-Bild (32×32px)" }
+      }
+    },
+    "cart": {
+      "name": "Warenkorb",
+      "settings": {
+        "cart_show_note": { "label": "Bestellnotiz-Feld anzeigen" }
+      }
+    }
+  }
+}

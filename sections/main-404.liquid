@@ -1,0 +1,13 @@
+<section class="error-404 page-width">
+  <span class="error-404__icon" aria-hidden="true">🐝</span>
+  <h1>{{ '404.title' | t }}</h1>
+  <p>{{ '404.subtext' | t }}</p>
+  <a href="{{ routes.root_url }}" class="button button--primary">{{ '404.link' | t }}</a>
+</section>
+
+{% schema %}
+{
+  "name": "404-Seite",
+  "settings": []
+}
+{% endschema %}

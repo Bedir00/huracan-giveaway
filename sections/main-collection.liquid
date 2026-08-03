@@ -1,0 +1,103 @@
+<section class="collection page-width">
+  <div class="collection__header">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="collection__description">{{ collection.description }}</div>
+    {% endif %}
+    <p class="collection__count">
+      {{ 'collections.general.items_with_count' | t: count: collection.products_count }}
+    </p>
+  </div>
+
+  <div class="collection__layout">
+    {% if collection.filters.size > 0 %}
+      <aside class="collection__filters">
+        <h2>{{ 'collections.filters.title' | t }}</h2>
+        {% form 'facets', collection %}
+          {% for filter in collection.filters %}
+            <fieldset class="collection__filter-group">
+              <legend>{{ filter.label }}</legend>
+              {% if filter.type == 'price_range' %}
+                <div class="collection__filter-price">
+                  <label>
+                    Min
+                    <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="{{ filter.range_min | money_without_currency }}">
+                  </label>
+                  <label>
+                    Max
+                    <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max | money_without_currency }}">
+                  </label>
+                </div>
+              {% else %}
+                {% for value in filter.values %}
+                  <label class="collection__filter-value">
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                    >
+                    {{ value.label }} ({{ value.count }})
+                  </label>
+                {% endfor %}
+              {% endif %}
+            </fieldset>
+          {% endfor %}
+          <button type="submit" class="button button--secondary">{{ 'collections.filters.title' | t }}</button>
+          <a href="{{ collection.url }}" class="collection__filter-clear">{{ 'collections.filters.clear_all' | t }}</a>
+        {% endform %}
+      </aside>
+    {% endif %}
+
+    <div class="collection__content">
+      <div class="collection__sort">
+        <label for="SortBy">{{ 'collections.sorting.title' | t }}</label>
+        <select name="sort_by" id="SortBy" data-sort-select>
+          {% for option in collection.sort_options %}
+            <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+              {{ option.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {% paginate collection.products by 16 %}
+        {% if collection.products.size > 0 %}
+          <div class="collection__grid">
+            {% for product in collection.products %}
+              {% render 'product-card', product: product %}
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="collection__empty">{{ 'collections.general.no_matches' | t }}</p>
+        {% endif %}
+
+        {% if paginate.pages > 1 %}
+          <nav class="pagination" aria-label="Seiten">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}">&larr;</a>
+            {% endif %}
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a href="{{ part.url }}">{{ part.title }}</a>
+              {% else %}
+                <span class="{% if part.title == paginate.current_page %}is-current{% endif %}">{{ part.title }}</span>
+              {% endif %}
+            {% endfor %}
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}">&rarr;</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Kollektionsseite",
+  "settings": []
+}
+{% endschema %}

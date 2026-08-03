@@ -1,0 +1,89 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Alles für deine Bienen. Und deinen Honig.",
+        "subheading": "Hochwertiger Imkereibedarf für Hobby- und Berufsimker – geprüfte Qualität, schnelle Lieferung.",
+        "button_label": "Jetzt entdecken",
+        "button_link": "shopify://collections/all"
+      }
+    },
+    "usp": {
+      "type": "usp-icons",
+      "settings": {
+        "heading": "Warum Bienenglück?"
+      },
+      "blocks": {
+        "usp-1": {
+          "type": "usp",
+          "settings": { "icon": "bee", "heading": "Geprüfte Imker-Qualität", "text": "Ausgewählte Produkte, empfohlen von erfahrenen Imker:innen." }
+        },
+        "usp-2": {
+          "type": "usp",
+          "settings": { "icon": "truck", "heading": "Schneller Versand", "text": "In der Regel innerhalb von 1-3 Werktagen bei dir." }
+        },
+        "usp-3": {
+          "type": "usp",
+          "settings": { "icon": "shield", "heading": "Sichere Schutzausrüstung", "text": "Zertifizierte Schutzkleidung für sorgloses Arbeiten am Bienenstock." }
+        },
+        "usp-4": {
+          "type": "usp",
+          "settings": { "icon": "support", "heading": "Persönliche Beratung", "text": "Unser Team hilft dir bei der Auswahl des passenden Zubehörs." }
+        }
+      },
+      "block_order": ["usp-1", "usp-2", "usp-3", "usp-4"]
+    },
+    "categories": {
+      "type": "collection-list",
+      "settings": {
+        "heading": "Nach Kategorie einkaufen"
+      },
+      "blocks": {
+        "cat-1": { "type": "collection", "settings": { "title": "Bienenstöcke & Zargen" } },
+        "cat-2": { "type": "collection", "settings": { "title": "Schutzkleidung" } },
+        "cat-3": { "type": "collection", "settings": { "title": "Rähmchen & Wachs" } },
+        "cat-4": { "type": "collection", "settings": { "title": "Erntetechnik" } },
+        "cat-5": { "type": "collection", "settings": { "title": "Fütterung & Gesundheit" } },
+        "cat-6": { "type": "collection", "settings": { "title": "Zubehör & Werkzeug" } }
+      },
+      "block_order": ["cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6"]
+    },
+    "bestsellers": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Unsere Bestseller",
+        "products_to_show": 8
+      }
+    },
+    "story": {
+      "type": "rich-text-story",
+      "settings": {
+        "heading": "Von Imkern für Imker",
+        "text": "<p>Bienenglück wurde von einer Imkerfamilie gegründet, die weiß, worauf es bei gutem Werkzeug ankommt. Wir testen jedes Produkt selbst am eigenen Bienenstand, bevor es in unser Sortiment aufgenommen wird.</p>",
+        "button_label": "Mehr über uns",
+        "button_link": "shopify://pages/ueber-uns"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "heading": "Das sagen unsere Kund:innen"
+      },
+      "blocks": {
+        "t-1": { "type": "testimonial", "settings": { "rating": 5, "quote": "Endlich ein Shop, der wirklich versteht, was Imker brauchen. Die Schutzkleidung ist top verarbeitet.", "author": "Sabine M., Hobbyimkerin" } },
+        "t-2": { "type": "testimonial", "settings": { "rating": 5, "quote": "Schnelle Lieferung, faire Preise und kompetente Beratung am Telefon. Kaufe nur noch hier.", "author": "Thomas R., Berufsimker" } },
+        "t-3": { "type": "testimonial", "settings": { "rating": 4, "quote": "Die Honigschleuder läuft super. Aufbau war dank Anleitung kein Problem.", "author": "Julia K." } }
+      },
+      "block_order": ["t-1", "t-2", "t-3"]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Der Bienenglück-Newsletter",
+        "text": "Imkertipps, neue Produkte und saisonale Angebote – direkt ins Postfach."
+      }
+    }
+  },
+  "order": ["hero", "usp", "categories", "bestsellers", "story", "testimonials", "newsletter"]
+}

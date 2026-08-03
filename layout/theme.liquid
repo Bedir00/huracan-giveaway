@@ -1,0 +1,68 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_primary }}">
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% if settings.favicon %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {% endif %}
+
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+    <script>
+      window.themeMoneyFormat = {{ shop.money_format | json }};
+    </script>
+
+    <style>
+      :root {
+        --color-primary: {{ settings.color_primary }};
+        --color-primary-dark: {{ settings.color_primary_dark }};
+        --color-accent: {{ settings.color_accent }};
+        --color-background: {{ settings.color_background }};
+        --color-surface: {{ settings.color_surface }};
+        --color-text: {{ settings.color_text }};
+        --color-text-muted: {{ settings.color_text_muted }};
+        --color-border: {{ settings.color_border }};
+        --color-sale: {{ settings.color_sale }};
+        --font-heading: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+        --font-heading-weight: {{ settings.font_heading.weight }};
+        --font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+        --font-body-weight: {{ settings.font_body.weight }};
+        --page-width: {{ settings.page_width }}px;
+        --radius: {% if settings.corner_style == 'rounded' %}12px{% else %}0px{% endif %};
+      }
+    </style>
+    {{ settings.font_heading | font_face: font_display: 'swap' }}
+    {{ settings.font_body | font_face: font_display: 'swap' }}
+  </head>
+
+  <body>
+    <a class="skip-to-content" href="#MainContent">Zum Inhalt springen</a>
+
+    {% section 'header' %}
+
+    <main id="MainContent" class="main-content">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    {{ 'global.js' | asset_url | script_tag }}
+  </body>
+</html>

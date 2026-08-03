@@ -1,0 +1,117 @@
+<section class="product page-width" data-section-id="{{ section.id }}" data-product-form>
+  <script type="application/json" data-product-variants>
+    {{ product.variants | json }}
+  </script>
+  <div class="product__media">
+    {% if product.media.size > 0 %}
+      <div class="product__media-main">
+        <img
+          id="ProductMainImage-{{ section.id }}"
+          src="{{ product.selected_or_first_available_variant.featured_image | default: product.featured_image | image_url: width: 900 }}"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          width="900"
+          height="{{ 900 | divided_by: product.featured_image.aspect_ratio | default: 900 }}"
+          loading="eager"
+        >
+      </div>
+      {% if product.media.size > 1 %}
+        <div class="product__media-thumbs">
+          {% for media in product.media %}
+            <button
+              type="button"
+              class="product__media-thumb{% if forloop.first %} is-active{% endif %}"
+              data-full-image="{{ media.preview_image | image_url: width: 900 }}"
+              aria-label="{{ 'products.product.view_details' | t }} {{ forloop.index }}"
+            >
+              <img src="{{ media.preview_image | image_url: width: 150 }}" alt="" width="150" height="150" loading="lazy">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="product__media-main product__media-main--placeholder">🍯</div>
+    {% endif %}
+  </div>
+
+  <div class="product__info">
+    {% if product.vendor != blank %}
+      <p class="product__vendor">{{ product.vendor }}</p>
+    {% endif %}
+    <h1 class="product__title">{{ product.title }}</h1>
+
+    <div id="ProductPrice-{{ section.id }}">{% render 'price', product: product %}</div>
+
+    <p
+      id="ProductAvailability-{{ section.id }}"
+      class="product__availability{% unless product.selected_or_first_available_variant.available %} product__availability--sold-out{% endunless %}"
+    >
+      {% unless product.selected_or_first_available_variant.available %}{{ 'products.product.sold_out' | t }}{% endunless %}
+    </p>
+
+    {% form 'product', product, id: 'ProductForm', class: 'product-form' %}
+      {% for option in product.options_with_values %}
+        <div class="product-form__option">
+          <label for="ProductOption-{{ option.position }}">{{ option.name }}</label>
+          <select
+            id="ProductOption-{{ option.position }}"
+            name="option-{{ option.position }}"
+            class="product-form__variant-select"
+            data-option-position="{{ option.position }}"
+          >
+            {% for value in option.values %}
+              <option value="{{ value | escape }}"{% if value == option.selected_value %} selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endfor %}
+
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="ProductVariantId-{{ section.id }}">
+
+      <div class="product-form__quantity">
+        <label for="ProductQuantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+        <input type="number" id="ProductQuantity-{{ section.id }}" name="quantity" value="1" min="1">
+      </div>
+
+      <button
+        type="submit"
+        name="add"
+        id="AddToCartButton-{{ section.id }}"
+        class="button button--primary product-form__submit"
+        data-label-add="{{ 'products.product.add_to_cart' | t }}"
+        data-label-soldout="{{ 'products.product.sold_out' | t }}"
+        {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+      >
+        {% if product.selected_or_first_available_variant.available %}
+          {{ 'products.product.add_to_cart' | t }}
+        {% else %}
+          {{ 'products.product.sold_out' | t }}
+        {% endif %}
+      </button>
+    {% endform %}
+
+    {% if product.description != blank %}
+      <div class="product__description">
+        <h2>{{ 'products.product.description' | t }}</h2>
+        {{ product.description }}
+      </div>
+    {% endif %}
+
+    <ul class="product__meta">
+      {% if product.selected_or_first_available_variant.sku != blank %}
+        <li>{{ 'products.product.sku' | t }}: {{ product.selected_or_first_available_variant.sku }}</li>
+      {% endif %}
+      {% if product.vendor != blank %}
+        <li>{{ 'products.product.vendor' | t }}: {{ product.vendor }}</li>
+      {% endif %}
+    </ul>
+
+    {% render 'social-share' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produktseite",
+  "settings": []
+}
+{% endschema %}

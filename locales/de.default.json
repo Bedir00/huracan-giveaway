@@ -1,0 +1,123 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Tags: {{ tags }}",
+      "page": "Seite {{ page }}"
+    },
+    "search": {
+      "title": "Suche",
+      "placeholder": "Wonach suchst du? z.B. Rähmchen, Schutzanzug ...",
+      "submit": "Suchen",
+      "no_results": "Keine Ergebnisse für „{{ terms }}“ gefunden.",
+      "results_for": "Suchergebnisse für „{{ terms }}“",
+      "results_with_count": {
+        "one": "{{ count }} Ergebnis",
+        "other": "{{ count }} Ergebnisse"
+      }
+    },
+    "newsletter": {
+      "heading": "Der Bienenglück-Newsletter",
+      "text": "Imkertipps, neue Produkte und saisonale Angebote – direkt ins Postfach.",
+      "placeholder": "Deine E-Mail-Adresse",
+      "button": "Anmelden",
+      "success": "Danke für deine Anmeldung!",
+      "error": "Bitte gib eine gültige E-Mail-Adresse ein."
+    },
+    "continue_shopping": "Weiter stöbern"
+  },
+  "404": {
+    "title": "Seite nicht gefunden",
+    "subtext": "Diese Wabe ist leer. Die gesuchte Seite existiert nicht (mehr).",
+    "link": "Zurück zur Startseite"
+  },
+  "header": {
+    "menu": "Menü",
+    "search": "Suchen",
+    "account": "Konto",
+    "cart": "Warenkorb",
+    "announcement_default": "Kostenloser Versand ab 79 € innerhalb Deutschlands"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "In den Warenkorb",
+      "sold_out": "Ausverkauft",
+      "unavailable": "Nicht verfügbar",
+      "on_sale": "Reduziert",
+      "quantity": "Menge",
+      "description": "Beschreibung",
+      "vendor": "Hersteller",
+      "sku": "Art.-Nr.",
+      "view_details": "Details ansehen",
+      "regular_price": "Regulärer Preis",
+      "sale_price": "Angebotspreis",
+      "price_from": "ab",
+      "choose_options": "Optionen wählen",
+      "added": "Zum Warenkorb hinzugefügt"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "Keine Produkte in dieser Kategorie gefunden.",
+      "items_with_count": {
+        "one": "{{ count }} Produkt",
+        "other": "{{ count }} Produkte"
+      },
+      "all_categories": "Alle Kategorien"
+    },
+    "sorting": {
+      "title": "Sortieren nach:",
+      "featured": "Empfohlen",
+      "price_ascending": "Preis: aufsteigend",
+      "price_descending": "Preis: absteigend",
+      "title_ascending": "Name: A–Z",
+      "title_descending": "Name: Z–A",
+      "created_descending": "Neuheiten"
+    },
+    "filters": {
+      "title": "Filtern",
+      "clear_all": "Filter zurücksetzen"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Dein Warenkorb",
+      "remove": "Entfernen",
+      "subtotal": "Zwischensumme",
+      "note": "Anmerkung zur Bestellung",
+      "note_placeholder": "Sonderwünsche zu deiner Bestellung ...",
+      "checkout": "Zur Kasse",
+      "continue_shopping": "Weiter einkaufen",
+      "empty": "Dein Warenkorb ist noch leer.",
+      "update": "Aktualisieren",
+      "taxes_included": "Inkl. MwSt., Versand wird beim Checkout berechnet."
+    }
+  },
+  "sections": {
+    "hero": {
+      "button": "Jetzt entdecken"
+    },
+    "usp": {
+      "heading": "Warum Bienenglück?"
+    },
+    "featured_collection": {
+      "heading": "Unsere Bestseller",
+      "button": "Alle Produkte ansehen"
+    },
+    "story": {
+      "heading": "Von Imkern für Imker"
+    },
+    "testimonials": {
+      "heading": "Das sagen unsere Kund:innen"
+    },
+    "collection_list": {
+      "heading": "Nach Kategorie einkaufen"
+    }
+  },
+  "footer": {
+    "about_heading": "Bienenglück",
+    "about_text": "Imkereibedarf für Hobby- und Berufsimker: von der Königinnenzucht bis zur Honigschleuder.",
+    "customer_service_heading": "Kundenservice",
+    "shop_heading": "Shop",
+    "payment_text": "Sichere Zahlungsmethoden"
+  }
+}

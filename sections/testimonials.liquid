@@ -1,0 +1,69 @@
+<section class="testimonials page-width">
+  {% if section.settings.heading != blank %}
+    <h2 class="testimonials__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  <div class="testimonials__grid">
+    {% for block in section.blocks %}
+      <blockquote class="testimonials__item" {{ block.shopify_attributes }}>
+        <div class="testimonials__stars" aria-hidden="true">
+          {% for i in (1..5) %}
+            {% if i <= block.settings.rating %}★{% else %}☆{% endif %}
+          {% endfor %}
+        </div>
+        <p>&ldquo;{{ block.settings.quote }}&rdquo;</p>
+        <cite>{{ block.settings.author }}</cite>
+      </blockquote>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Kundenstimmen",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Das sagen unsere Kund:innen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Kundenstimme",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Bewertung",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Zitat"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kundenstimmen",
+      "blocks": [
+        { "type": "testimonial", "settings": { "rating": 5, "quote": "Endlich ein Shop, der wirklich versteht, was Imker brauchen. Die Schutzkleidung ist top verarbeitet.", "author": "Sabine M., Hobbyimkerin" } },
+        { "type": "testimonial", "settings": { "rating": 5, "quote": "Schnelle Lieferung, faire Preise und kompetente Beratung am Telefon. Kaufe nur noch hier.", "author": "Thomas R., Berufsimker" } },
+        { "type": "testimonial", "settings": { "rating": 4, "quote": "Die Honigschleuder läuft super. Aufbau war dank Anleitung kein Problem.", "author": "Julia K." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

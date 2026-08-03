@@ -1,0 +1,22 @@
+{
+  "current": {
+    "color_primary": "#D9932E",
+    "color_primary_dark": "#B5761E",
+    "color_accent": "#55764E",
+    "color_background": "#FBF4E6",
+    "color_surface": "#FFFFFF",
+    "color_text": "#2B1B0E",
+    "color_text_muted": "#6B5B4A",
+    "color_border": "#E8DCC4",
+    "color_sale": "#C1440E",
+    "font_heading": "playfair_display_n7",
+    "font_body": "assistant_n4",
+    "page_width": 1280,
+    "corner_style": "rounded",
+    "social_instagram_url": "https://instagram.com",
+    "social_facebook_url": "https://facebook.com",
+    "social_youtube_url": "",
+    "social_pinterest_url": "",
+    "cart_show_note": true
+  }
+}

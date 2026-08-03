@@ -1,0 +1,87 @@
+<section class="usp-icons page-width">
+  {% if section.settings.heading != blank %}
+    <h2 class="usp-icons__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  <div class="usp-icons__grid">
+    {% for block in section.blocks %}
+      <div class="usp-icons__item" {{ block.shopify_attributes }}>
+        <span class="usp-icons__icon">
+          {% case block.settings.icon %}
+            {% when 'bee' %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="13" rx="5" ry="6"></ellipse><path d="M7 11h10M7 15h10"></path><path d="M12 7c-2-3-6-3-7 0 1 2 4 2 7 0zM12 7c2-3 6-3 7 0-1 2-4 2-7 0z"></path></svg>
+            {% when 'shield' %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"></path></svg>
+            {% when 'truck' %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="7" width="14" height="10"></rect><path d="M15 10h4l3 3v4h-7z"></path><circle cx="6" cy="19" r="1.6"></circle><circle cx="17" cy="19" r="1.6"></circle></svg>
+            {% when 'leaf' %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20c8 0 14-6 16-16C10 6 4 12 4 20z"></path></svg>
+            {% when 'support' %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"></path><rect x="2" y="13" width="5" height="6" rx="1.5"></rect><rect x="17" y="13" width="5" height="6" rx="1.5"></rect></svg>
+          {% endcase %}
+        </span>
+        {% if block.settings.heading != blank %}
+          <h3>{{ block.settings.heading }}</h3>
+        {% endif %}
+        {% if block.settings.text != blank %}
+          <p>{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "USP-Leiste",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Warum Bienenglück?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Vorteil",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "bee", "label": "Biene" },
+            { "value": "shield", "label": "Schutz" },
+            { "value": "truck", "label": "Versand" },
+            { "value": "leaf", "label": "Natur" },
+            { "value": "support", "label": "Beratung" }
+          ],
+          "default": "bee"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Überschrift"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "USP-Leiste",
+      "blocks": [
+        { "type": "usp", "settings": { "icon": "bee", "heading": "Geprüfte Imker-Qualität", "text": "Ausgewählte Produkte, empfohlen von erfahrenen Imker:innen." } },
+        { "type": "usp", "settings": { "icon": "truck", "heading": "Schneller Versand", "text": "In der Regel innerhalb von 1-3 Werktagen bei dir." } },
+        { "type": "usp", "settings": { "icon": "shield", "heading": "Sichere Schutzausrüstung", "text": "Zertifizierte Schutzkleidung für sorgloses Arbeiten am Bienenstock." } },
+        { "type": "usp", "settings": { "icon": "support", "heading": "Persönliche Beratung", "text": "Unser Team hilft dir bei der Auswahl des passenden Zubehörs." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

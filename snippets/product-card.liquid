@@ -1,0 +1,45 @@
+{%- comment -%}
+  Renders a product card. Pass product: blank to render a placeholder card.
+{%- endcomment -%}
+<div class="product-card">
+  {% if product != blank %}
+    <a href="{{ product.url }}" class="product-card__media">
+      {% if product.featured_image %}
+        <img
+          src="{{ product.featured_image | image_url: width: 500 }}"
+          srcset="{{ product.featured_image | image_url: width: 300 }} 300w, {{ product.featured_image | image_url: width: 500 }} 500w"
+          sizes="(min-width: 990px) 25vw, 50vw"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          loading="lazy"
+          width="500"
+          height="{{ 500 | divided_by: product.featured_image.aspect_ratio | default: 500 }}"
+        >
+      {% else %}
+        <div class="product-card__placeholder">🍯</div>
+      {% endif %}
+      {% if product.compare_at_price > product.price %}
+        <span class="product-card__badge">{{ 'products.product.on_sale' | t }}</span>
+      {% elsif product.available == false %}
+        <span class="product-card__badge product-card__badge--sold-out">{{ 'products.product.sold_out' | t }}</span>
+      {% endif %}
+    </a>
+    <div class="product-card__info">
+      {% if product.vendor != blank %}
+        <p class="product-card__vendor">{{ product.vendor }}</p>
+      {% endif %}
+      <h3 class="product-card__title">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+      {% render 'price', product: product %}
+    </div>
+  {% else %}
+    <div class="product-card__media product-card__media--placeholder">
+      <div class="product-card__placeholder">🍯</div>
+    </div>
+    <div class="product-card__info">
+      <p class="product-card__vendor">Bienenglück</p>
+      <h3 class="product-card__title">Produktname</h3>
+      <div class="price"><span class="price__regular">–</span></div>
+    </div>
+  {% endif %}
+</div>

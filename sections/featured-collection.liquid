@@ -1,0 +1,58 @@
+<section class="featured-collection page-width">
+  <div class="featured-collection__header">
+    {% if section.settings.heading != blank %}
+      <h2>{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.collection != blank %}
+      <a href="{{ collections[section.settings.collection].url }}" class="featured-collection__view-all">
+        {{ 'sections.featured_collection.button' | t }}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="featured-collection__grid">
+    {% assign collection = collections[section.settings.collection] %}
+    {% if collection != blank %}
+      {% for product in collection.products limit: section.settings.products_to_show %}
+        {% render 'product-card', product: product %}
+      {% endfor %}
+    {% else %}
+      {% for i in (1..4) %}
+        {% render 'product-card', product: blank %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bestseller-Produkte",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Unsere Bestseller"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Kollektion"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Anzahl Produkte",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bestseller-Produkte"
+    }
+  ]
+}
+{% endschema %}

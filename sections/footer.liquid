@@ -1,0 +1,94 @@
+<footer class="site-footer">
+  <div class="site-footer__newsletter">
+    <div class="page-width">
+      <h2>{{ section.settings.newsletter_heading | default: 'general.newsletter.heading' | t }}</h2>
+      <p>{{ section.settings.newsletter_text | default: 'general.newsletter.text' | t }}</p>
+      {% form 'customer', id: 'FooterNewsletterForm' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="newsletter-form__row">
+          <label for="FooterNewsletterEmail" class="visually-hidden">{{ 'general.newsletter.placeholder' | t }}</label>
+          <input
+            type="email"
+            name="contact[email]"
+            id="FooterNewsletterEmail"
+            placeholder="{{ 'general.newsletter.placeholder' | t }}"
+            required
+          >
+          <button type="submit">{{ 'general.newsletter.button' | t }}</button>
+        </div>
+        {% if form.posted_successfully? %}
+          <p class="newsletter-form__success">{{ 'general.newsletter.success' | t }}</p>
+        {% endif %}
+        {% if form.errors %}
+          <p class="newsletter-form__error">{{ 'general.newsletter.error' | t }}</p>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+
+  <div class="site-footer__main page-width">
+    <div class="site-footer__col site-footer__about">
+      <h3>{{ 'footer.about_heading' | t }}</h3>
+      <p>{{ section.settings.about_text | default: 'footer.about_text' | t }}</p>
+      {% render 'social-icons' %}
+    </div>
+
+    <div class="site-footer__col">
+      <h3>{{ 'footer.shop_heading' | t }}</h3>
+      <ul>
+        {% for link in section.settings.shop_menu.links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <h3>{{ 'footer.customer_service_heading' | t }}</h3>
+      <ul>
+        {% for link in section.settings.service_menu.links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom page-width">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+    <p class="site-footer__payment">{{ 'footer.payment_text' | t }}</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter Überschrift"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "label": "Newsletter Text"
+    },
+    {
+      "type": "textarea",
+      "id": "about_text",
+      "label": "Über-uns Text (Footer)"
+    },
+    {
+      "type": "link_list",
+      "id": "shop_menu",
+      "label": "Shop-Menü",
+      "default": "footer"
+    },
+    {
+      "type": "link_list",
+      "id": "service_menu",
+      "label": "Kundenservice-Menü",
+      "default": "footer"
+    }
+  ]
+}
+{% endschema %}

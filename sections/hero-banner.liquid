@@ -1,0 +1,79 @@
+<section class="hero-banner" style="--hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
+  {% if section.settings.image %}
+    <img
+      class="hero-banner__image"
+      src="{{ section.settings.image | image_url: width: 1800 }}"
+      srcset="{{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1400 }} 1400w, {{ section.settings.image | image_url: width: 1800 }} 1800w"
+      sizes="100vw"
+      alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+      loading="eager"
+      width="{{ section.settings.image.width }}"
+      height="{{ section.settings.image.height }}"
+    >
+  {% endif %}
+  <div class="hero-banner__overlay"></div>
+  <div class="hero-banner__content page-width">
+    {% if section.settings.heading != blank %}
+      <h1>{{ section.settings.heading }}</h1>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p>{{ section.settings.subheading }}</p>
+    {% endif %}
+    {% if section.settings.button_label != blank %}
+      <a href="{{ section.settings.button_link | default: '#' }}" class="button button--primary">
+        {{ section.settings.button_label }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero-Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hintergrundbild"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Bild-Abdunkelung",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Alles für deine Bienen. Und deinen Honig."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Unterüberschrift",
+      "default": "Hochwertiger Imkereibedarf für Hobby- und Berufsimker – geprüfte Qualität, schnelle Lieferung."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button-Text",
+      "default": "Jetzt entdecken"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button-Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero-Banner"
+    }
+  ]
+}
+{% endschema %}
