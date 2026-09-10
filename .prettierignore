@@ -1,0 +1,5 @@
+.next
+node_modules
+prisma/dev.db
+public/sw.js
+public/offline.html

@@ -1,0 +1,218 @@
+// Akquise CRM - data model
+//
+// SQLite is the default so the app runs with zero infrastructure. Every model
+// avoids SQLite-only features, so switching `provider` to "postgresql" and
+// pointing DATABASE_URL at a server is the only change needed to scale up.
+//
+// Enum-like columns are plain strings; the allowed values live in
+// src/lib/constants.ts so they can be extended without a migration.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("AGENT") // ADMIN | AGENT
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ownedLeads       Lead[]         @relation("leadOwner")
+  foundLeads       Lead[]         @relation("leadFinder")
+  appointmentLeads Lead[]         @relation("leadAppointmentSetter")
+  closedLeads      Lead[]         @relation("leadCloser")
+  activities       Activity[]
+  tasks            Task[]         @relation("taskAssignee")
+  createdTasks     Task[]         @relation("taskCreator")
+  appointments     Appointment[]
+  notifications    Notification[]
+  sessions         Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Lead {
+  id          String  @id @default(cuid())
+  company     String
+  industry    String?
+  location    String?
+  website     String?
+  instagram   String?
+  linkedin    String?
+  phone       String?
+  email       String?
+  companySize String?
+  source      String  @default("SONSTIGE")
+
+  stage      String @default("NEU")
+  priority   String @default("WARM") // HOT | WARM | COLD
+  score      Int?
+  potentials String @default("[]") // JSON array of potential keys
+
+  notes String?
+
+  // Normalised copies used for duplicate detection and fast search.
+  companyKey String?
+  domainKey  String?
+  phoneKey   String?
+  emailKey   String?
+
+  ownerId            String?
+  foundById          String?
+  appointmentSetById String?
+  closedById         String?
+
+  dealValue  Float?
+  lostReason String?
+
+  // Funnel high-water marks: kept so a lost lead still counts as "was
+  // contacted" / "did reply" in the conversion rates and funnel report.
+  maxStage           String    @default("NEU")
+  firstContactAt     DateTime?
+  firstReplyAt       DateTime?
+  firstAppointmentAt DateTime?
+  firstOfferAt       DateTime?
+
+  lastContactAt DateTime?
+  wonAt         DateTime?
+  lostAt        DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  owner            User? @relation("leadOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  foundBy          User? @relation("leadFinder", fields: [foundById], references: [id], onDelete: SetNull)
+  appointmentSetBy User? @relation("leadAppointmentSetter", fields: [appointmentSetById], references: [id], onDelete: SetNull)
+  closedBy         User? @relation("leadCloser", fields: [closedById], references: [id], onDelete: SetNull)
+
+  contacts      Contact[]
+  activities    Activity[]
+  tasks         Task[]
+  appointments  Appointment[]
+  notifications Notification[]
+
+  @@index([stage])
+  @@index([ownerId])
+  @@index([companyKey])
+  @@index([domainKey])
+  @@index([phoneKey])
+  @@index([emailKey])
+}
+
+model Contact {
+  id               String  @id @default(cuid())
+  leadId           String
+  name             String
+  position         String?
+  phone            String?
+  email            String?
+  preferredChannel String? // PHONE | WHATSAPP | EMAIL | INSTAGRAM | LINKEDIN
+  isPrimary        Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  leadId    String
+  userId    String?
+  type      String // CALL | WHATSAPP | EMAIL | INSTAGRAM | LINKEDIN | MEETING | NOTE | FOLLOWUP | OFFER | STAGE | SYSTEM
+  note      String?
+  outcome   String? // REACHED | NOT_REACHED | REPLIED | NO_REPLY
+  createdAt DateTime @default(now())
+
+  lead Lead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([leadId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  leadId      String?
+  userId      String
+  title       String
+  dueAt       DateTime
+  hasTime     Boolean   @default(false)
+  done        Boolean   @default(false)
+  doneAt      DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  lead      Lead? @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user      User  @relation("taskAssignee", fields: [userId], references: [id], onDelete: Cascade)
+  createdBy User? @relation("taskCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([userId, done, dueAt])
+  @@index([leadId])
+}
+
+model Appointment {
+  id           String   @id @default(cuid())
+  leadId       String
+  userId       String
+  startsAt     DateTime
+  durationMin  Int      @default(30)
+  kind         String   @default("CALL") // CALL | VIDEO | ONSITE | OTHER
+  participants String?
+  notes        String?
+  result       String? // OPEN | HELD | NO_SHOW | POSTPONED | WON | LOST
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startsAt])
+  @@index([leadId])
+}
+
+model Template {
+  id        String   @id @default(cuid())
+  title     String
+  category  String   @default("OTHER") // PHONE | WHATSAPP | INSTAGRAM | LINKEDIN | EMAIL | FOLLOWUP | OTHER
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String // LEAD_ASSIGNED | LEAD_CHANGED | TASK_DUE | TASK_OVERDUE | APPOINTMENT_TODAY | APPOINTMENT_SOON | LEAD_REPLIED
+  title     String
+  body      String?
+  leadId    String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lead Lead? @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}
