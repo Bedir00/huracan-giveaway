@@ -13,122 +13,101 @@
   :root {
     --cyan: #1ff2ff;
     --magenta: #ff2fd6;
-    --ink: #04050e;
+    --navy: #0c2335;     /* Home Deluxe CI */
+    --ink: 3, 5, 14;
   }
   html, body { margin: 0; background: #000; }
   #stage {
     position: relative; width: 1080px; height: 1080px; overflow: hidden;
-    background: var(--ink) url('../build/hintergrund-1080.png') center / 1080px 1080px no-repeat;
+    background: #04050e url('../build/hintergrund-1080.png') center / 1080px 1080px no-repeat;
     font-family: 'Poppins', sans-serif; color: #fff;
   }
-  /* static darkening behind the copy, so the text reads on the marble and the shelf */
+  /* even, static darkening: calm for the eye, cheap for the GIF */
   #shade {
-    position: absolute; inset: 0; pointer-events: none;
+    position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 50% 40% at 50% 39%, rgba(4,5,14,.70) 0%, rgba(4,5,14,.50) 55%, rgba(4,5,14,0) 100%);
+      linear-gradient(to top, rgba(var(--ink), .55) 0%, rgba(var(--ink), 0) 24%),
+      radial-gradient(ellipse 62% 44% at 50% 50%, rgba(var(--ink), .58) 0%, rgba(var(--ink), .30) 70%, rgba(var(--ink), 0) 100%),
+      rgba(var(--ink), .30);
   }
+
+  /* text block: horizontal centre via flex, the rest is optical correction from render.js */
   #copy {
-    position: absolute; left: 0; right: 0; top: 96px;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
+    position: absolute; left: 0; right: 0; top: 262px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  #copy > * { position: relative; }
+
+  .eyebrow { display: flex; align-items: center; gap: 28px; }
+  .eyebrow .rule { width: 96px; height: 2px; }
+  .eyebrow .rule.l { background: linear-gradient(90deg, rgba(31,242,255,0), var(--cyan)); transform-origin: 100% 50%; }
+  .eyebrow .rule.r { background: linear-gradient(90deg, var(--magenta), rgba(255,47,214,0)); transform-origin: 0 50%; }
+  .eyebrow .txt {
+    position: relative; font-weight: 600; font-size: 36px; line-height: 1;
+    letter-spacing: .42em; margin-right: -.42em;     /* cancel the trailing tracking */
+    text-shadow: 0 0 16px rgba(31,242,255,.55);
   }
 
-  /* CYBER MONDAY: neon tube */
-  .kicker {
-    font-weight: 600; font-size: 58px; line-height: 1; letter-spacing: .22em; margin-right: -.22em;
-    color: #effeff;
-    text-shadow: 0 0 3px #fff, 0 0 10px var(--cyan), 0 0 24px var(--cyan), 0 0 52px rgba(31,242,255,.6);
+  .headline {
+    margin-top: 10px; font-weight: 800; font-size: 268px; line-height: 1; letter-spacing: -.015em;
+    white-space: nowrap;
+    text-shadow: 0 0 2px rgba(255,255,255,.35), 0 0 36px rgba(255,47,214,.42), 0 0 96px rgba(255,47,214,.26);
   }
-  .kicker span { display: inline-block; }
+  .headline .pct { margin-left: .1em; }
 
-  /* 15 % */
-  .big { position: relative; margin-top: 14px; line-height: 1; }
-  .big .num {
-    display: flex; align-items: flex-start; justify-content: center;
-    font-weight: 800; font-size: 300px; line-height: .86; letter-spacing: -.03em;
+  .sub {
+    margin-top: -20px; font-size: 76px; line-height: 1.1; letter-spacing: .01em; white-space: nowrap;
   }
-  .big .num .pct { font-size: .58em; line-height: 1; margin-left: .17em; margin-top: .05em; letter-spacing: 0; }
-  .big .main {
-    color: #fff;
-    text-shadow: 0 0 6px #ffd6f6, 0 0 22px var(--magenta), 0 0 60px rgba(255,47,214,.75), 0 0 110px rgba(255,47,214,.4);
-  }
-  .big .ghost { position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0; }
-  .big .ghost.c { color: var(--cyan); }
-  .big .ghost.m { color: var(--magenta); }
+  .sub .auf { font-weight: 400; margin-right: .22em; }
+  .sub .alles { font-weight: 700; }
 
-  /* auf ALLES */
-  .line2 {
-    margin-top: 6px; font-size: 96px; line-height: 1.05; letter-spacing: .01em;
-    text-shadow: 0 0 18px rgba(255,47,214,.55), 0 0 40px rgba(4,5,14,.8);
+  .codebox {
+    margin-top: 44px; padding: 22px 48px;
+    background: #fff; color: var(--navy);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35), 0 0 34px rgba(31,242,255,.28);
   }
-  .line2 .auf { font-weight: 500; margin-right: .18em; color: #ffe9fb; }
-  .line2 .alles { font-weight: 800; }
+  .codebox .txt { position: relative; font-size: 42px; line-height: 1.2; white-space: nowrap; }
+  .codebox .label { font-weight: 500; margin-right: .3em; }
+  .codebox .code { font-weight: 800; letter-spacing: .1em; margin-right: -.1em; }
+  .codebox .ripple { position: absolute; inset: 0; border: 2px solid #fff; opacity: 0; pointer-events: none; }
 
-  /* Code pill */
-  .pill { position: relative; margin-top: 34px; padding: 18px 44px 16px; }
-  .pill svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .pill .bg { fill: rgba(6,8,22,.72); }
-  .pill .stroke {
-    fill: none; stroke: url(#grad); stroke-width: 4;
-    filter: drop-shadow(0 0 6px rgba(31,242,255,.9)) drop-shadow(0 0 14px rgba(255,47,214,.7));
+  #logo {
+    position: absolute; left: 50%; bottom: 56px; width: 200px; margin-left: -100px; opacity: .92;
   }
-  .pill .clip { position: absolute; inset: 0; overflow: hidden; }
-  .pill .shine {
-    position: absolute; top: -20%; bottom: -20%; left: 0; width: 34%;
-    background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.55) 50%, rgba(255,255,255,0) 100%);
-    transform: translateX(-140%) skewX(-18deg);
-  }
-  .pill .text {
-    position: relative; font-size: 54px; line-height: 1.2; white-space: nowrap;
-    text-shadow: 0 0 12px rgba(31,242,255,.55);
-  }
-  .pill .label { font-weight: 500; color: #dffcff; margin-right: .28em; display: inline-block; }
-  .pill .code { font-weight: 800; letter-spacing: .08em; margin-right: -.08em; }
-  .pill .code span { display: inline-block; }
-  .pill .caret {
-    position: absolute; top: 12%; width: 5px; height: 76%; left: 0;
-    background: var(--cyan); box-shadow: 0 0 10px var(--cyan); opacity: 0;
-  }
+
+  /* measurement mode for render.js: only the target's ink is painted, on transparent */
+  html.measure, html.measure body, html.measure #stage { background: transparent !important; }
+  html.measure #stage * { visibility: hidden; text-shadow: none !important; box-shadow: none !important; }
+  html.measure #stage .m-target, html.measure #stage .m-target * { visibility: visible; }
 </style>
 </head>
 <body>
 <div id="stage">
   <div id="shade"></div>
   <div id="copy">
-    <div class="kicker" id="kicker">CYBER MONDAY</div>
-
-    <div class="big" id="big">
-      <div class="num main"><span>15</span><span class="pct">%</span></div>
-      <div class="num ghost c" aria-hidden="true"><span>15</span><span class="pct">%</span></div>
-      <div class="num ghost m" aria-hidden="true"><span>15</span><span class="pct">%</span></div>
+    <div class="eyebrow" id="eyebrow">
+      <span class="rule l" id="ruleL"></span>
+      <span class="txt" id="eyebrowText">CYBER MONDAY</span>
+      <span class="rule r" id="ruleR"></span>
     </div>
-
-    <div class="line2" id="line2"><span class="auf">auf</span><span class="alles">ALLES</span></div>
-
-    <div class="pill" id="pill">
-      <svg aria-hidden="true">
-        <defs>
-          <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#1ff2ff"/>
-            <stop offset="1" stop-color="#ff2fd6"/>
-          </linearGradient>
-        </defs>
-        <rect class="bg" id="pillBg" x="0" y="0" width="100%" height="100%" rx="0"/>
-        <rect class="stroke" id="pillStroke" x="0" y="0" width="100%" height="100%" rx="0" pathLength="1"/>
-      </svg>
-      <div class="clip"><div class="shine" id="shine"></div></div>
-      <div class="text" id="pillText"><span class="label" id="label">Code:</span><span class="code" id="code">CYBER15</span><span class="caret" id="caret"></span></div>
+    <div class="headline" id="headline"><span>15</span><span class="pct">%</span></div>
+    <div class="sub" id="sub"><span class="auf">auf</span><span class="alles">ALLES</span></div>
+    <div class="codebox" id="codebox">
+      <div class="txt" id="codeText"><span class="label">Code:</span><span class="code">CYBER15</span></div>
+      <div class="ripple" id="ripple"></div>
     </div>
   </div>
+  <img id="logo" src="logo-home-deluxe-weiss.png" alt="Home Deluxe">
 </div>
 
 <script>
 /*
- * One shared timeline of T seconds. Every keyframe is given in seconds and
- * converted to an offset, so the timing reads like an edit list.
- * The preview loops in the browser; render.js pauses it and seeks frame by frame.
+ * One shared timeline of T seconds, keyframes written in seconds.
+ * The browser preview loops it; render.js pauses it and seeks frame by frame.
  */
-const T = 7.6;            // loop length in seconds
-const OUT = T - 0.64;     // outro starts
+const T = 8.0;           // loop length
+const HOLD = 3.2;        // everything settled: first GIF frame + measuring point
+const OUT = 7.25;        // exit starts
 const anims = [];
 
 function key(el, frames) {
@@ -138,130 +117,55 @@ function key(el, frames) {
   if (kf[kf.length - 1].offset < 1) kf.push(Object.assign(clean(kf[kf.length - 1]), { offset: 1 }));
   anims.push(el.animate(kf, { duration: T * 1000, iterations: Infinity, fill: 'both' }));
 }
-const STEP = 'steps(1, end)';
-const EASE_OUT = 'cubic-bezier(.16, 1, .3, 1)';
+const EXPO_OUT = 'cubic-bezier(.16, 1, .3, 1)';
+const EASE_IN = 'cubic-bezier(.55, 0, .75, .2)';
+const $ = id => document.getElementById(id);
 
-function splitChars(el) {
-  const chars = [...el.textContent];
-  el.textContent = '';
-  return chars.map(ch => {
-    const s = document.createElement('span');
-    s.textContent = ch === ' ' ? ' ' : ch;
-    el.appendChild(s);
-    return s;
-  });
+// fade + rise + de-blur, the one entrance used for every text line
+function rise(el, t0, dur, dy, blur, scale = 1) {
+  const hidden = { opacity: 0, transform: `translateY(${dy}px) scale(${scale})`, filter: `blur(${blur}px)` };
+  const shown = { opacity: 1, transform: 'none', filter: 'none' };
+  key(el, [[t0, hidden, EXPO_OUT], [t0 + dur, shown], [OUT, shown, EASE_IN], [OUT + 0.42, hidden]]);
 }
 
 function build() {
-  /* ---- CYBER MONDAY: tubes switch on letter by letter (shuffled order) ---- */
-  const letters = splitChars(document.getElementById('kicker'));
-  const order = [6, 0, 9, 3, 11, 1, 7, 4, 10, 2, 8, 5];
-  letters.forEach((s, i) => {
-    const st = 0.12 + order[i] * 0.04;
-    const f = [
-      [st, { opacity: 0 }, STEP], [st + 0.04, { opacity: 1 }, STEP], [st + 0.08, { opacity: .15 }, STEP],
-      [st + 0.12, { opacity: 1 }, STEP], [st + 0.20, { opacity: .3 }, STEP], [st + 0.24, { opacity: 1 }, STEP],
-    ];
-    if (i === 3) { // one tube hiccups during the hold
-      f.push([5.20, { opacity: .2 }, STEP], [5.28, { opacity: 1 }, STEP], [5.36, { opacity: .25 }, STEP], [5.40, { opacity: 1 }, STEP]);
-    }
-    key(s, f);
-  });
+  rise($('eyebrowText'), 0.20, 0.80, 14, 8);
+  [$('ruleL'), $('ruleR')].forEach(r => key(r, [
+    [0.42, { transform: 'scaleX(0)', opacity: 0 }, EXPO_OUT], [1.22, { transform: 'scaleX(1)', opacity: 1 }],
+    [OUT, { transform: 'scaleX(1)', opacity: 1 }, EASE_IN], [OUT + 0.42, { transform: 'scaleX(0)', opacity: 0 }],
+  ]));
 
-  /* ---- 15 %: punch in with blur, then RGB glitch ---- */
-  const main = document.querySelector('.big .main');
-  key(main, [
-    [0.72, { opacity: 0, transform: 'scale(1.9)', filter: 'blur(18px)' }, 'cubic-bezier(.2,.9,.25,1)'],
-    [0.84, { opacity: 1, transform: 'scale(1.25)', filter: 'blur(8px)' }, 'cubic-bezier(.2,.9,.25,1)'],
-    [1.04, { opacity: 1, transform: 'scale(0.95)', filter: 'blur(0px)' }, 'ease-in-out'],
-    [1.20, { opacity: 1, transform: 'scale(1)', filter: 'blur(0px)' }],
-  ]);
-  const gc = document.querySelector('.big .ghost.c');
-  const gm = document.querySelector('.big .ghost.m');
-  const glitch = (t0) => ({
-    c: [
-      [t0, { opacity: 0, transform: 'translateX(0px)', clipPath: 'inset(0% 0% 0% 0%)' }, STEP],
-      [t0 + 0.04, { opacity: .95, transform: 'translateX(-18px)', clipPath: 'inset(8% 0% 58% 0%)' }, STEP],
-      [t0 + 0.08, { opacity: .95, transform: 'translateX(12px)', clipPath: 'inset(62% 0% 6% 0%)' }, STEP],
-      [t0 + 0.12, { opacity: .9, transform: 'translateX(-9px)', clipPath: 'inset(28% 0% 38% 0%)' }, STEP],
-      [t0 + 0.16, { opacity: .7, transform: 'translateX(4px)', clipPath: 'inset(0% 0% 0% 0%)' }, STEP],
-      [t0 + 0.20, { opacity: 0, transform: 'translateX(0px)', clipPath: 'inset(0% 0% 0% 0%)' }, STEP],
-    ],
-    m: [
-      [t0, { opacity: 0, transform: 'translateX(0px)', clipPath: 'inset(0% 0% 0% 0%)' }, STEP],
-      [t0 + 0.04, { opacity: .95, transform: 'translateX(16px)', clipPath: 'inset(44% 0% 18% 0%)' }, STEP],
-      [t0 + 0.08, { opacity: .95, transform: 'translateX(-14px)', clipPath: 'inset(4% 0% 70% 0%)' }, STEP],
-      [t0 + 0.12, { opacity: .9, transform: 'translateX(8px)', clipPath: 'inset(56% 0% 14% 0%)' }, STEP],
-      [t0 + 0.16, { opacity: .7, transform: 'translateX(-4px)', clipPath: 'inset(0% 0% 0% 0%)' }, STEP],
-      [t0 + 0.20, { opacity: 0, transform: 'translateX(0px)', clipPath: 'inset(0% 0% 0% 0%)' }, STEP],
-    ],
-  });
-  const g1 = glitch(0.96), g2 = glitch(OUT);
-  key(gc, [...g1.c, ...g2.c]);
-  key(gm, [...g1.m, ...g2.m]);
+  rise($('headline'), 0.52, 0.95, 46, 14, 0.94);
+  rise($('sub'), 0.88, 0.85, 30, 10);
 
-  /* ---- auf ALLES: wipe up from the baseline ---- */
-  key(document.getElementById('line2'), [
-    [1.28, { opacity: 0, transform: 'translateY(56px)', clipPath: 'inset(100% -20% -40% -20%)' }, EASE_OUT],
-    [1.72, { opacity: 1, transform: 'translateY(0px)', clipPath: 'inset(-40% -20% -40% -20%)' }],
+  // code box opens from its centre, then the text settles in
+  const closed = 'inset(0% 50% 0% 50%)', open = 'inset(-90px -90px -90px -90px)';
+  key($('codebox'), [
+    [1.22, { clipPath: closed, opacity: 1 }, EXPO_OUT], [1.95, { clipPath: open, opacity: 1 }],
+    [OUT, { clipPath: open, opacity: 1 }, EASE_IN], [OUT + 0.42, { clipPath: open, opacity: 0 }],
   ]);
+  rise($('codeText'), 1.55, 0.70, 12, 6);
 
-  /* ---- Code pill: border draws on, then the code types in ---- */
-  key(document.getElementById('pillStroke'), [
-    [1.84, { strokeDasharray: '1 1', strokeDashoffset: 1, opacity: 1 }, 'cubic-bezier(.65,0,.35,1)'],
-    [2.40, { strokeDasharray: '1 1', strokeDashoffset: 0, opacity: 1 }],
-  ]);
-  key(document.getElementById('pillBg'), [
-    [2.16, { opacity: 0 }, 'ease-out'],
-    [2.44, { opacity: 1 }],
-  ]);
-  key(document.getElementById('label'), [
-    [2.32, { opacity: 0, transform: 'translateX(-14px)' }, EASE_OUT],
-    [2.56, { opacity: 1, transform: 'translateX(0px)' }],
-  ]);
+  // a calm outline pulse draws the eye to the code, twice per loop
+  const pulse = t => [
+    [t, { inset: '0px', opacity: 0.9 }, EXPO_OUT], [t + 0.8, { inset: '-16px', opacity: 0 }],
+    [t + 0.81, { inset: '0px', opacity: 0 }],
+  ];
+  key($('ripple'), [[0, { inset: '0px', opacity: 0 }], ...pulse(2.30), ...pulse(5.30)]);
 
-  const codeChars = splitChars(document.getElementById('code'));
-  const textBox = document.getElementById('pillText').getBoundingClientRect();
-  const TYPE0 = 2.60, TYPE_DT = 0.08;
-  codeChars.forEach((s, i) => {
-    const t = TYPE0 + i * TYPE_DT;
-    key(s, [[t, { opacity: 0 }, STEP], [t + TYPE_DT / 2, { opacity: 1 }, STEP]]);
-  });
-  // caret follows the typed characters, blinks briefly, then leaves before the shine
-  const edges = [document.getElementById('code').getBoundingClientRect().left - textBox.left]
-    .concat(codeChars.map(s => s.getBoundingClientRect().right - textBox.left));
-  const caretF = [[2.52, { opacity: 0, transform: `translateX(${edges[0] + 2}px)` }, STEP]];
-  caretF.push([2.56, { opacity: 1, transform: `translateX(${edges[0] + 2}px)` }, STEP]);
-  codeChars.forEach((s, i) => {
-    caretF.push([TYPE0 + i * TYPE_DT + TYPE_DT / 2, { opacity: 1, transform: `translateX(${edges[i + 1] + 6}px)` }, STEP]);
-  });
-  const endX = `translateX(${edges[edges.length - 1] + 6}px)`;
-  caretF.push(
-    [3.16, { opacity: 0, transform: endX }, STEP], [3.24, { opacity: 1, transform: endX }, STEP],
-    [3.32, { opacity: 0, transform: endX }, STEP],
-  );
-  key(document.getElementById('caret'), caretF);
-
-  key(document.getElementById('shine'), [
-    [3.36, { transform: 'translateX(-140%) skewX(-18deg)' }, 'cubic-bezier(.45,0,.25,1)'],
-    [3.80, { transform: 'translateX(420%) skewX(-18deg)' }],
-  ]);
-
-  /* ---- Outro: the whole sign flickers off, loop restarts ---- */
-  key(document.getElementById('copy'), [
-    [OUT, { opacity: 1 }, STEP], [OUT + 0.04, { opacity: .25 }, STEP], [OUT + 0.08, { opacity: 1 }, STEP],
-    [OUT + 0.16, { opacity: 0 }, STEP], [OUT + 0.20, { opacity: .7 }, STEP], [OUT + 0.24, { opacity: 0 }, STEP],
-    [OUT + 0.32, { opacity: .35 }, STEP], [OUT + 0.36, { opacity: 0 }, STEP],
-  ]);
+  const logoOn = { opacity: 0.92 }, logoOff = { opacity: 0 };
+  key($('logo'), [[1.70, logoOff, 'ease-out'], [2.30, logoOn], [OUT, logoOn, EASE_IN], [OUT + 0.42, logoOff]]);
 }
 
-window.ANIM = { T, ready: false };
-window.seek = (t) => { anims.forEach(a => { a.pause(); a.currentTime = (t % T) * 1000; }); };
+window.ANIM = { T, HOLD, ready: false };
+window.seek = (t) => { anims.forEach(a => { a.pause(); a.currentTime = (((t % T) + T) % T) * 1000; }); };
 
-Promise.all([400, 500, 600, 700, 800].map(w => document.fonts.load(`${w} 100px Poppins`))).then(() => {
-  build();
-  window.ANIM.ready = document.fonts.check('800 100px Poppins') && document.fonts.check('500 100px Poppins');
-});
+Promise.all([400, 500, 600, 700, 800].map(w => document.fonts.load(`${w} 100px Poppins`)))
+  .then(() => $('logo').decode())
+  .then(() => {
+    build();
+    window.ANIM.ready = document.fonts.check('800 100px Poppins') && document.fonts.check('500 100px Poppins');
+  });
 </script>
 </body>
 </html>
