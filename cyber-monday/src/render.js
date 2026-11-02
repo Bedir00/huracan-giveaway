@@ -1,8 +1,11 @@
-// Renders animation.html frame by frame into PNGs.
+// Renders an animation HTML frame by frame into PNGs.
 //
 //   node render.js <outDir> [fps=25]          all frames, starting at HOLD (full offer in frame 1:
 //                                             Outlook and link previews only ever show the first frame)
 //   node render.js --still <out.png> <t>      single frame for checking the layout
+//
+// ANIM_HTML=<path> selects another composition (default: animation.html next to this file).
+// Canvas size and centre point come from window.ANIM (W, H, CX, CY; default 1080 square).
 //
 // Before rendering, every line is centred optically: the real ink of each line is
 // measured from a transparent screenshot and shifted onto the centre axis, so side
@@ -11,7 +14,6 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const CENTER = 540;
 const cx = b => (b.x0 + b.x1) / 2;
 const cy = b => (b.y0 + b.y1) / 2;
 
@@ -58,42 +60,44 @@ const shift = (page, sel, prop, v) => page.evaluate(([sel, prop, v]) => {
   e.style[prop] = (cur + v).toFixed(2) + 'px';
 }, [sel, prop, v]);
 
-async function calibrate(page, stage, log) {
+async function calibrate(page, stage, log, CX, CY) {
   await page.evaluate(() => window.seek(window.ANIM.HOLD));
-  // 1. every line: ink centred on x = 540
+  // 1. every line: ink centred on x = CX
   for (const [measure, move] of [['#eyebrowText', '#eyebrow'], ['#headline', '#headline'], ['#sub', '#sub'], ['#logo', '#logo']]) {
-    await shift(page, move, 'left', CENTER - cx(await inkBox(page, stage, measure)));
+    await shift(page, move, 'left', CX - cx(await inkBox(page, stage, measure)));
   }
   // 2. code text centred inside its box, both axes
   const box = await rect(page, '#codebox');
   const t = await inkBox(page, stage, '#codeText');
   await shift(page, '#codeText', 'left', cx(box) - cx(t));
   await shift(page, '#codeText', 'top', cy(box) - cy(t));
-  // 3. block from the cap line of CYBER MONDAY to the bottom of the code box: centred on y = 540
+  // 3. block from the cap line of CYBER MONDAY to the bottom of the code box: centred on y = CY
   const top = (await inkBox(page, stage, '#eyebrowText')).y0;
   const bottom = (await rect(page, '#codebox')).y1;
-  await shift(page, '#copy', 'top', CENTER - (top + bottom) / 2);
+  await shift(page, '#copy', 'top', CY - (top + bottom) / 2);
 
   if (log) {
     const rep = [];
-    for (const sel of ['#eyebrowText', '#headline', '#sub', '#logo']) rep.push(`${sel} ${(cx(await inkBox(page, stage, sel)) - CENTER).toFixed(1)}px`);
+    for (const sel of ['#eyebrowText', '#headline', '#sub', '#logo']) rep.push(`${sel} ${(cx(await inkBox(page, stage, sel)) - CX).toFixed(1)}px`);
     const b = await rect(page, '#codebox'), c = await inkBox(page, stage, '#codeText');
-    rep.push(`#codebox ${(cx(b) - CENTER).toFixed(1)}px`, `code text in box ${(cx(c) - cx(b)).toFixed(1)}/${(cy(c) - cy(b)).toFixed(1)}px`);
+    rep.push(`#codebox ${(cx(b) - CX).toFixed(1)}px`, `code text in box ${(cx(c) - cx(b)).toFixed(1)}/${(cy(c) - cy(b)).toFixed(1)}px`);
     const tt = (await inkBox(page, stage, '#eyebrowText')).y0;
-    rep.push(`block y ${tt}..${b.y1.toFixed(0)} centre ${((tt + b.y1) / 2 - CENTER).toFixed(1)}px`);
+    rep.push(`block y ${tt}..${b.y1.toFixed(0)} centre ${((tt + b.y1) / 2 - CY).toFixed(1)}px`);
     console.log('Abweichung von der Mitte: ' + rep.join(' | '));
   }
 }
 
 (async () => {
   const args = process.argv.slice(2);
+  const html = path.resolve(process.env.ANIM_HTML || path.join(__dirname, 'animation.html'));
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1080, height: 1080 }, deviceScaleFactor: 1 });
-  await page.goto('file://' + path.join(__dirname, 'animation.html'));
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1920 }, deviceScaleFactor: 1 });
+  await page.goto('file://' + html);
   await page.waitForFunction(() => window.ANIM && window.ANIM.ready, null, { timeout: 15000 });
+  const { T, HOLD, W = 1080, H = 1080, CX = W / 2, CY = H / 2 } = await page.evaluate(() => window.ANIM);
+  await page.setViewportSize({ width: W, height: H });
   const stage = await page.$('#stage');
-  await calibrate(page, stage, args[0] !== '--still');
-  const { T, HOLD } = await page.evaluate(() => window.ANIM);
+  await calibrate(page, stage, args[0] !== '--still', CX, CY);
 
   if (args[0] === '--still') {
     await page.evaluate(t => window.seek(t), parseFloat(args[2]));

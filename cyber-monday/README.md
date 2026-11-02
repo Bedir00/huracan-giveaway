@@ -21,6 +21,10 @@ der Textblock sitzt vertikal mittig.
 Code-Button öffnet sich aus der Mitte → ein ruhiger Kontur-Puls lenkt den Blick auf
 den Code (2× je Schleife) → Halten → alles blendet weich aus.
 
+## 16:9-Banner
+
+Banner mit echten Shop-Artikeln (Higgsfield-Motiv + Produkt-Hotspots): siehe [`banner-16x9/`](banner-16x9/README.md).
+
 ## Neu bauen
 
 ```bash

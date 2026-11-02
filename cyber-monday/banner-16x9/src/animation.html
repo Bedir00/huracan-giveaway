@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Cyber Monday Banner 16:9</title>
+<style>
+  @font-face { font-family: 'Poppins'; font-weight: 400; src: url('../../src/fonts/poppins-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 500; src: url('../../src/fonts/poppins-latin-500-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 600; src: url('../../src/fonts/poppins-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 700; src: url('../../src/fonts/poppins-latin-700-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 800; src: url('../../src/fonts/poppins-latin-800-normal.woff2') format('woff2'); }
+
+  :root {
+    --cyan: #1ff2ff;
+    --magenta: #ff2fd6;
+    --navy: #0c2335;     /* Home Deluxe CI */
+    --ink: 3, 5, 14;
+  }
+  html, body { margin: 0; background: #000; }
+  #stage {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: #04050e url('../build/hintergrund-1920.png') center / 1920px 1080px no-repeat;
+    font-family: 'Poppins', sans-serif; color: #fff;
+  }
+  /* static: soft pool of shadow behind the copy on the marble wall, darker floor for the logo */
+  #shade {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(var(--ink), .5) 0%, rgba(var(--ink), 0) 16%),
+      radial-gradient(ellipse 560px 400px at 960px 418px, rgba(var(--ink), .62) 0%, rgba(var(--ink), .34) 60%, rgba(var(--ink), 0) 100%),
+      rgba(var(--ink), .10);
+  }
+
+  /* text block: horizontal centre via flex, optical correction from render.js */
+  #copy {
+    position: absolute; left: 0; right: 0; top: 160px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  #copy > * { position: relative; }
+
+  .eyebrow { display: flex; align-items: center; gap: 28px; }
+  .eyebrow .rule { width: 96px; height: 2px; }
+  .eyebrow .rule.l { background: linear-gradient(90deg, rgba(31,242,255,0), var(--cyan)); transform-origin: 100% 50%; }
+  .eyebrow .rule.r { background: linear-gradient(90deg, var(--magenta), rgba(255,47,214,0)); transform-origin: 0 50%; }
+  .eyebrow .txt {
+    position: relative; font-weight: 600; font-size: 36px; line-height: 1;
+    letter-spacing: .42em; margin-right: -.42em;
+    text-shadow: 0 0 16px rgba(31,242,255,.55);
+  }
+  .headline {
+    margin-top: 10px; font-weight: 800; font-size: 268px; line-height: 1; letter-spacing: -.015em;
+    white-space: nowrap;
+    text-shadow: 0 0 2px rgba(255,255,255,.35), 0 0 36px rgba(255,47,214,.42), 0 0 96px rgba(255,47,214,.26);
+  }
+  .headline .pct { margin-left: .1em; }
+  .sub { margin-top: -20px; font-size: 76px; line-height: 1.1; letter-spacing: .01em; white-space: nowrap; }
+  .sub .auf { font-weight: 400; margin-right: .22em; }
+  .sub .alles { font-weight: 700; }
+
+  .codebox {
+    margin-top: 44px; padding: 22px 48px;
+    background: #fff; color: var(--navy);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35), 0 0 34px rgba(31,242,255,.28);
+  }
+  .codebox .txt { position: relative; font-size: 42px; line-height: 1.2; white-space: nowrap; }
+  .codebox .label { font-weight: 500; margin-right: .3em; }
+  .codebox .code { font-weight: 800; letter-spacing: .1em; margin-right: -.1em; }
+  .codebox .ripple { position: absolute; inset: 0; border: 2px solid #fff; opacity: 0; pointer-events: none; }
+
+  #logo { position: absolute; left: 50%; bottom: 44px; width: 210px; margin-left: -105px; opacity: .92; }
+
+  /* product hotspots: real Home Deluxe articles in the scene */
+  .spot { position: absolute; width: 0; height: 0; }
+  .spot .dot {
+    position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.28), 0 0 14px rgba(255,255,255,.6);
+  }
+  .spot .ring {
+    position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid #fff; box-sizing: border-box; opacity: 0;
+  }
+  .spot .stem { position: absolute; left: -1px; width: 2px; background: rgba(255,255,255,.75); }
+  .spot.up .stem { bottom: 9px; height: 34px; transform-origin: 50% 100%; }
+  .spot.down .stem { top: 9px; height: 34px; transform-origin: 50% 0; }
+  .spot .tag {
+    position: absolute; white-space: nowrap; padding: 9px 14px 10px;
+    background: rgba(6, 9, 22, .78); border: 1px solid rgba(255,255,255,.22);
+  }
+  .spot.up .tag { bottom: 43px; }
+  .spot.down .tag { top: 43px; }
+  .spot.left .tag { left: -1px; }
+  .spot.right .tag { right: -1px; }
+  .spot .cat { display: block; font-weight: 500; font-size: 13px; line-height: 1.2; letter-spacing: .16em; text-transform: uppercase; opacity: .72; }
+  .spot .name { display: block; font-weight: 700; font-size: 21px; line-height: 1.25; letter-spacing: .02em; }
+
+  /* measurement mode for render.js: only the target's ink is painted, on transparent */
+  html.measure, html.measure body, html.measure #stage { background: transparent !important; }
+  html.measure #stage * { visibility: hidden; text-shadow: none !important; box-shadow: none !important; }
+  html.measure #stage .m-target, html.measure #stage .m-target * { visibility: visible; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="shade"></div>
+
+  <!-- left/right: which side of the dot the tag hangs; up/down: stem direction -->
+  <div class="spot up left" id="spotSofa" style="left: 372px; top: 676px;">
+    <span class="ring"></span><span class="dot"></span><span class="stem"></span>
+    <div class="tag"><span class="cat">Modulares Sofa</span><span class="name">VERONA XL</span></div>
+  </div>
+  <div class="spot down left" id="spotTable" style="left: 600px; top: 806px;">
+    <span class="ring"></span><span class="dot"></span><span class="stem"></span>
+    <div class="tag"><span class="cat">Couchtisch Marmor</span><span class="name">AMIRI XL</span></div>
+  </div>
+  <div class="spot up left" id="spotChair" style="left: 1586px; top: 664px;">
+    <span class="ring"></span><span class="dot"></span><span class="stem"></span>
+    <div class="tag"><span class="cat">Relaxsessel</span><span class="name">CHILL</span></div>
+  </div>
+  <div class="spot up right" id="spotLamp" style="left: 1790px; top: 398px;">
+    <span class="ring"></span><span class="dot"></span><span class="stem"></span>
+    <div class="tag"><span class="cat">Stehlampe</span><span class="name">LUNA</span></div>
+  </div>
+
+  <div id="copy">
+    <div class="eyebrow" id="eyebrow">
+      <span class="rule l" id="ruleL"></span>
+      <span class="txt" id="eyebrowText">CYBER MONDAY</span>
+      <span class="rule r" id="ruleR"></span>
+    </div>
+    <div class="headline" id="headline"><span>15</span><span class="pct">%</span></div>
+    <div class="sub" id="sub"><span class="auf">auf</span><span class="alles">ALLES</span></div>
+    <div class="codebox" id="codebox">
+      <div class="txt" id="codeText"><span class="label">Code:</span><span class="code">CYBER15</span></div>
+      <div class="ripple" id="ripple"></div>
+    </div>
+  </div>
+  <img id="logo" src="../../src/logo-home-deluxe-weiss.png" alt="Home Deluxe">
+</div>
+
+<script>
+/*
+ * One shared timeline of T seconds, keyframes written in seconds.
+ * The browser preview loops it; render.js pauses it and seeks frame by frame.
+ */
+const T = 9.0;           // loop length
+const HOLD = 3.8;        // everything settled: first GIF frame + measuring point
+const OUT = 8.25;        // exit starts
+const anims = [];
+
+function key(el, frames) {
+  const kf = frames.map(([t, props, easing]) => Object.assign({ offset: t / T }, props, easing ? { easing } : {}));
+  const clean = k => { const c = Object.assign({}, k); delete c.offset; delete c.easing; return c; };
+  if (kf[0].offset > 0) kf.unshift(Object.assign(clean(kf[0]), { offset: 0 }));
+  if (kf[kf.length - 1].offset < 1) kf.push(Object.assign(clean(kf[kf.length - 1]), { offset: 1 }));
+  anims.push(el.animate(kf, { duration: T * 1000, iterations: Infinity, fill: 'both' }));
+}
+const EXPO_OUT = 'cubic-bezier(.16, 1, .3, 1)';
+const EASE_IN = 'cubic-bezier(.55, 0, .75, .2)';
+const $ = id => document.getElementById(id);
+
+// fade + rise + de-blur, the one entrance used for every text line
+function rise(el, t0, dur, dy, blur, scale = 1) {
+  const hidden = { opacity: 0, transform: `translateY(${dy}px) scale(${scale})`, filter: `blur(${blur}px)` };
+  const shown = { opacity: 1, transform: 'none', filter: 'none' };
+  key(el, [[t0, hidden, EXPO_OUT], [t0 + dur, shown], [OUT, shown, EASE_IN], [OUT + 0.42, hidden]]);
+}
+
+// hotspot: dot pops, stem grows, tag wipes open; ring pulses while holding
+function spot(el, t0) {
+  const dot = el.querySelector('.dot'), stem = el.querySelector('.stem'), tag = el.querySelector('.tag'), ring = el.querySelector('.ring');
+  const up = el.classList.contains('up'), fromLeft = el.classList.contains('left');
+  key(dot, [
+    [t0, { transform: 'scale(0)', opacity: 0 }, 'cubic-bezier(.34, 1.56, .64, 1)'], [t0 + 0.35, { transform: 'scale(1)', opacity: 1 }],
+    [OUT, { transform: 'scale(1)', opacity: 1 }, EASE_IN], [OUT + 0.36, { transform: 'scale(0)', opacity: 0 }],
+  ]);
+  key(stem, [
+    [t0 + 0.15, { transform: 'scaleY(0)' }, EXPO_OUT], [t0 + 0.5, { transform: 'scaleY(1)' }],
+    [OUT, { transform: 'scaleY(1)', opacity: 1 }, EASE_IN], [OUT + 0.36, { transform: 'scaleY(1)', opacity: 0 }],
+  ]);
+  const closed = fromLeft ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)', open = 'inset(0% 0% 0% 0%)';
+  key(tag, [
+    [t0 + 0.38, { clipPath: closed, opacity: 1, transform: `translateY(${up ? 6 : -6}px)` }, EXPO_OUT],
+    [t0 + 0.95, { clipPath: open, opacity: 1, transform: 'translateY(0px)' }],
+    [OUT, { clipPath: open, opacity: 1, transform: 'translateY(0px)' }, EASE_IN],
+    [OUT + 0.36, { clipPath: open, opacity: 0, transform: 'translateY(0px)' }],
+  ]);
+  const pulses = [];
+  for (let p = t0 + 0.9; p < OUT - 0.9; p += 1.8) {
+    pulses.push([p - 0.02, { transform: 'scale(1)', opacity: 0 }],   // stay invisible until the pulse fires
+      [p, { transform: 'scale(1)', opacity: 0.9 }, 'ease-out'], [p + 1.1, { transform: 'scale(3.2)', opacity: 0 }], [p + 1.11, { transform: 'scale(1)', opacity: 0 }]);
+  }
+  key(ring, [[0, { transform: 'scale(1)', opacity: 0 }], ...pulses]);
+}
+
+function build() {
+  rise($('eyebrowText'), 0.20, 0.80, 14, 8);
+  [$('ruleL'), $('ruleR')].forEach(r => key(r, [
+    [0.42, { transform: 'scaleX(0)', opacity: 0 }, EXPO_OUT], [1.22, { transform: 'scaleX(1)', opacity: 1 }],
+    [OUT, { transform: 'scaleX(1)', opacity: 1 }, EASE_IN], [OUT + 0.42, { transform: 'scaleX(0)', opacity: 0 }],
+  ]));
+  rise($('headline'), 0.52, 0.95, 46, 14, 0.94);
+  rise($('sub'), 0.88, 0.85, 30, 10);
+
+  const closed = 'inset(0% 50% 0% 50%)', open = 'inset(-90px -90px -90px -90px)';
+  key($('codebox'), [
+    [1.22, { clipPath: closed, opacity: 1 }, EXPO_OUT], [1.95, { clipPath: open, opacity: 1 }],
+    [OUT, { clipPath: open, opacity: 1 }, EASE_IN], [OUT + 0.42, { clipPath: open, opacity: 0 }],
+  ]);
+  rise($('codeText'), 1.55, 0.70, 12, 6);
+
+  const pulse = t => [
+    [t - 0.02, { inset: '0px', opacity: 0 }],
+    [t, { inset: '0px', opacity: 0.9 }, EXPO_OUT], [t + 0.8, { inset: '-16px', opacity: 0 }],
+    [t + 0.81, { inset: '0px', opacity: 0 }],
+  ];
+  key($('ripple'), [[0, { inset: '0px', opacity: 0 }], ...pulse(2.30), ...pulse(6.10)]);
+
+  // products follow the offer, left to right
+  spot($('spotSofa'), 2.15);
+  spot($('spotTable'), 2.40);
+  spot($('spotChair'), 2.65);
+  spot($('spotLamp'), 2.90);
+
+  const logoOn = { opacity: 0.92 }, logoOff = { opacity: 0 };
+  key($('logo'), [[1.70, logoOff, 'ease-out'], [2.30, logoOn], [OUT, logoOn, EASE_IN], [OUT + 0.42, logoOff]]);
+}
+
+// render.js centres the copy on (CX, CY): canvas centre horizontally, centre of the marble wall vertically
+window.ANIM = { T, HOLD, W: 1920, H: 1080, CX: 960, CY: 418, ready: false };
+window.seek = (t) => { anims.forEach(a => { a.pause(); a.currentTime = (((t % T) + T) % T) * 1000; }); };
+
+Promise.all([400, 500, 600, 700, 800].map(w => document.fonts.load(`${w} 100px Poppins`)))
+  .then(() => $('logo').decode())
+  .then(() => {
+    build();
+    window.ANIM.ready = document.fonts.check('800 100px Poppins') && document.fonts.check('500 100px Poppins');
+  });
+</script>
+</body>
+</html>
