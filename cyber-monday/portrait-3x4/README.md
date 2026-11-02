@@ -13,9 +13,13 @@ Veröffentlichung kurz gegen den Shop prüfen.
 | `export/cyber-monday-3x4-600x800.gif` | Newsletter (< 1 MB, 20 fps) |
 | `export/cyber-monday-3x4-1080x1440.jpg` | Standbild |
 
-8 s Schleife, gleiche Animation wie das Quadrat-Motiv. Textblock exakt horizontal
-mittig und vertikal mittig auf der Marmorwand (über Sofa und Sessel). Erster Frame =
-komplettes Angebot.
+8 s Schleife, gleiche Animation wie das Quadrat-Motiv. Die Einblendung läuft direkt ab
+der ersten Sekunde (CYBER MONDAY ab 0,2 s, nach ~2 s steht alles), danach Halten bis
+7,25 s, weiches Ausblenden, Neustart. Textblock exakt horizontal mittig und vertikal
+mittig auf der Marmorwand (über Sofa und Sessel). Das Standbild zeigt den Endzustand.
+
+Hinweis Newsletter: Outlook (Windows) zeigt bei GIFs nur den ersten Frame – der ist
+jetzt der leere Raum ohne Text.
 
 ## Neu bauen
 

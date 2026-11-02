@@ -1,8 +1,9 @@
 // Renders an animation HTML frame by frame into PNGs.
 //
-//   node render.js <outDir> [fps=25]          all frames, starting at HOLD (full offer in frame 1:
-//                                             Outlook and link previews only ever show the first frame)
-//   node render.js --still <out.png> <t>      single frame for checking the layout
+//   node render.js <outDir> [fps=25] [start]  all frames of one loop. Without start the loop begins at
+//                                             HOLD (full offer in frame 1: Outlook and link previews only
+//                                             ever show the first frame); start=0 begins with the fade-in
+//   node render.js --still <out.png> <t|hold> single frame (t in seconds, or the settled HOLD state)
 //
 // ANIM_HTML=<path> selects another composition (default: animation.html next to this file).
 // Canvas size and centre point come from window.ANIM (W, H, CX, CY; default 1080 square).
@@ -100,16 +101,17 @@ async function calibrate(page, stage, log, CX, CY) {
   await calibrate(page, stage, args[0] !== '--still', CX, CY);
 
   if (args[0] === '--still') {
-    await page.evaluate(t => window.seek(t), parseFloat(args[2]));
+    await page.evaluate(t => window.seek(t), args[2] === 'hold' ? HOLD : parseFloat(args[2]));
     await stage.screenshot({ path: args[1] });
   } else {
     const outDir = args[0];
     const fps = parseInt(args[1] || '25', 10);
+    const start = args[2] !== undefined ? parseFloat(args[2]) : HOLD;
     fs.mkdirSync(outDir, { recursive: true });
     for (const f of fs.readdirSync(outDir)) if (f.endsWith('.png')) fs.unlinkSync(path.join(outDir, f));
     const n = Math.round(T * fps);
     for (let i = 0; i < n; i++) {
-      await page.evaluate(t => window.seek(t), HOLD + i / fps);
+      await page.evaluate(t => window.seek(t), start + i / fps);
       await stage.screenshot({ path: path.join(outDir, `f${String(i).padStart(4, '0')}.png`) });
     }
     console.log(`${n} frames, ${T}s @ ${fps} fps -> ${outDir}`);
