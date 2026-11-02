@@ -25,6 +25,10 @@ den Code (2× je Schleife) → Halten → alles blendet weich aus.
 
 Banner mit echten Shop-Artikeln (Higgsfield-Motiv + Produkt-Hotspots): siehe [`banner-16x9/`](banner-16x9/README.md).
 
+## 3:4-Motiv
+
+Hochformat 1080 × 1440 ohne Produkt-Hinweise: siehe [`portrait-3x4/`](portrait-3x4/README.md).
+
 ## Neu bauen
 
 ```bash
