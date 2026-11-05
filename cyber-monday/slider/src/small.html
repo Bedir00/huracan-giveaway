@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Cyber Monday Small</title>
+<style>
+  @font-face { font-family: 'Poppins'; font-weight: 400; src: url('../../src/fonts/poppins-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 500; src: url('../../src/fonts/poppins-latin-500-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 600; src: url('../../src/fonts/poppins-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 700; src: url('../../src/fonts/poppins-latin-700-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 800; src: url('../../src/fonts/poppins-latin-800-normal.woff2') format('woff2'); }
+
+  :root {
+    --cyan: #1ff2ff;
+    --magenta: #ff2fd6;
+    --navy: #0c2335;     /* Home Deluxe CI */
+    --ink: 3, 5, 14;
+  }
+  html, body { margin: 0; background: #000; }
+  #stage {
+    position: relative; width: 1080px; height: 1080px; overflow: hidden;
+    background: #04050e url('../build/hintergrund-small.png') center / 1080px 1080px no-repeat;
+    font-family: 'Poppins', sans-serif; color: #fff;
+  }
+  /* static: soft pool of shadow behind the copy on the marble wall, darker floor for the logo */
+  #shade {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(var(--ink), .55) 0%, rgba(var(--ink), 0) 14%),
+      radial-gradient(ellipse 540px 420px at 540px 430px, rgba(var(--ink), .62) 0%, rgba(var(--ink), .34) 60%, rgba(var(--ink), 0) 100%),
+      rgba(var(--ink), .10);
+  }
+
+  /* text block: horizontal centre via flex, optical correction from render.js */
+  #copy {
+    position: absolute; left: 0; right: 0; top: 160px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  #copy > * { position: relative; }
+
+  .eyebrow { display: flex; align-items: center; gap: 28px; }
+  .eyebrow .rule { width: 96px; height: 2px; }
+  .eyebrow .rule.l { background: linear-gradient(90deg, rgba(31,242,255,0), var(--cyan)); transform-origin: 100% 50%; }
+  .eyebrow .rule.r { background: linear-gradient(90deg, var(--magenta), rgba(255,47,214,0)); transform-origin: 0 50%; }
+  .eyebrow .txt {
+    position: relative; font-weight: 600; font-size: 36px; line-height: 1;
+    letter-spacing: .42em; margin-right: -.42em;
+    text-shadow: 0 0 16px rgba(31,242,255,.55);
+  }
+  .headline {
+    margin-top: 10px; font-weight: 800; font-size: 268px; line-height: 1; letter-spacing: -.015em;
+    white-space: nowrap;
+    text-shadow: 0 0 2px rgba(255,255,255,.35), 0 0 36px rgba(255,47,214,.42), 0 0 96px rgba(255,47,214,.26);
+  }
+  .headline .pct { margin-left: .1em; }
+  .sub { margin-top: -20px; font-size: 76px; line-height: 1.1; letter-spacing: .01em; white-space: nowrap; }
+  .sub .auf { font-weight: 400; margin-right: .22em; }
+  .sub .alles { font-weight: 700; }
+
+  .codebox {
+    margin-top: 44px; padding: 22px 48px;
+    background: #fff; color: var(--navy);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35), 0 0 34px rgba(31,242,255,.28);
+  }
+  .codebox .txt { position: relative; font-size: 42px; line-height: 1.2; white-space: nowrap; }
+  .codebox .label { font-weight: 500; margin-right: .3em; }
+  .codebox .code { font-weight: 800; letter-spacing: .1em; margin-right: -.1em; }
+  .codebox .ripple { position: absolute; inset: 0; border: 2px solid #fff; opacity: 0; pointer-events: none; }
+
+  /* square: the logo closes the centred block under the button, on the marble wall */
+  #logo { position: relative; display: block; width: 190px; margin-top: 40px; opacity: .92; }
+
+
+  /* measurement mode for render.js: only the target's ink is painted, on transparent */
+  html.measure, html.measure body, html.measure #stage { background: transparent !important; }
+  html.measure #stage * { visibility: hidden; text-shadow: none !important; box-shadow: none !important; }
+  html.measure #stage .m-target, html.measure #stage .m-target * { visibility: visible; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="shade"></div>
+
+
+  <div id="copy">
+    <div class="eyebrow" id="eyebrow">
+      <span class="rule l" id="ruleL"></span>
+      <span class="txt" id="eyebrowText">CYBER MONDAY</span>
+      <span class="rule r" id="ruleR"></span>
+    </div>
+    <div class="headline" id="headline"><span>15</span><span class="pct">%</span></div>
+    <div class="sub" id="sub"><span class="auf">auf</span><span class="alles">ALLES</span></div>
+    <div class="codebox" id="codebox">
+      <div class="txt" id="codeText"><span class="label">Code:</span><span class="code">CYBER15</span></div>
+      <div class="ripple" id="ripple"></div>
+    </div>
+    <img id="logo" src="../../src/logo-home-deluxe-weiss.png" alt="Home Deluxe">
+  </div>
+</div>
+
+<script>
+/*
+ * One shared timeline of T seconds, keyframes written in seconds.
+ * The browser preview loops it; render.js pauses it and seeks frame by frame.
+ */
+const T = 8.0;           // loop length
+const HOLD = 3.2;        // everything settled: first GIF frame + measuring point
+const OUT = 7.25;        // exit starts
+const anims = [];
+
+function key(el, frames) {
+  const kf = frames.map(([t, props, easing]) => Object.assign({ offset: t / T }, props, easing ? { easing } : {}));
+  const clean = k => { const c = Object.assign({}, k); delete c.offset; delete c.easing; return c; };
+  if (kf[0].offset > 0) kf.unshift(Object.assign(clean(kf[0]), { offset: 0 }));
+  if (kf[kf.length - 1].offset < 1) kf.push(Object.assign(clean(kf[kf.length - 1]), { offset: 1 }));
+  anims.push(el.animate(kf, { duration: T * 1000, iterations: Infinity, fill: 'both' }));
+}
+const EXPO_OUT = 'cubic-bezier(.16, 1, .3, 1)';
+const EASE_IN = 'cubic-bezier(.55, 0, .75, .2)';
+const $ = id => document.getElementById(id);
+
+// fade + rise + de-blur, the one entrance used for every text line
+function rise(el, t0, dur, dy, blur, scale = 1) {
+  const hidden = { opacity: 0, transform: `translateY(${dy}px) scale(${scale})`, filter: `blur(${blur}px)` };
+  const shown = { opacity: 1, transform: 'none', filter: 'none' };
+  key(el, [[t0, hidden, EXPO_OUT], [t0 + dur, shown], [OUT, shown, EASE_IN], [OUT + 0.42, hidden]]);
+}
+
+
+function build() {
+  rise($('eyebrowText'), 0.20, 0.80, 14, 8);
+  [$('ruleL'), $('ruleR')].forEach(r => key(r, [
+    [0.42, { transform: 'scaleX(0)', opacity: 0 }, EXPO_OUT], [1.22, { transform: 'scaleX(1)', opacity: 1 }],
+    [OUT, { transform: 'scaleX(1)', opacity: 1 }, EASE_IN], [OUT + 0.42, { transform: 'scaleX(0)', opacity: 0 }],
+  ]));
+  rise($('headline'), 0.52, 0.95, 46, 14, 0.94);
+  rise($('sub'), 0.88, 0.85, 30, 10);
+
+  const closed = 'inset(0% 50% 0% 50%)', open = 'inset(-90px -90px -90px -90px)';
+  key($('codebox'), [
+    [1.22, { clipPath: closed, opacity: 1 }, EXPO_OUT], [1.95, { clipPath: open, opacity: 1 }],
+    [OUT, { clipPath: open, opacity: 1 }, EASE_IN], [OUT + 0.42, { clipPath: open, opacity: 0 }],
+  ]);
+  rise($('codeText'), 1.55, 0.70, 12, 6);
+
+  const pulse = t => [
+    [t - 0.02, { inset: '0px', opacity: 0 }],
+    [t, { inset: '0px', opacity: 0.9 }, EXPO_OUT], [t + 0.8, { inset: '-16px', opacity: 0 }],
+    [t + 0.81, { inset: '0px', opacity: 0 }],
+  ];
+  key($('ripple'), [[0, { inset: '0px', opacity: 0 }], ...pulse(2.30), ...pulse(5.30)]);
+
+
+  const logoOn = { opacity: 0.92 }, logoOff = { opacity: 0 };
+  key($('logo'), [[1.70, logoOff, 'ease-out'], [2.30, logoOn], [OUT, logoOn, EASE_IN], [OUT + 0.42, logoOff]]);
+}
+
+// render.js centres the copy on (CX, CY): canvas centre horizontally, centre of the marble wall vertically
+// layout in CSS px (1080 square), rendered with DPR=4/3 -> 1440 x 1440
+window.ANIM = { T, HOLD, W: 1080, H: 1080, CX: 540, CY: 430, BOTTOM: '#logo', ready: false };
+window.seek = (t) => { anims.forEach(a => { a.pause(); a.currentTime = (((t % T) + T) % T) * 1000; }); };
+
+Promise.all([400, 500, 600, 700, 800].map(w => document.fonts.load(`${w} 100px Poppins`)))
+  .then(() => $('logo').decode())
+  .then(() => {
+    build();
+    window.ANIM.ready = document.fonts.check('800 100px Poppins') && document.fonts.check('500 100px Poppins');
+  });
+</script>
+</body>
+</html>

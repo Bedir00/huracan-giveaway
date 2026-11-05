@@ -29,6 +29,10 @@ Banner mit echten Shop-Artikeln (Higgsfield-Motiv + Produkt-Hotspots): siehe [`b
 
 Hochformat 1080 × 1440 ohne Produkt-Hinweise: siehe [`portrait-3x4/`](portrait-3x4/README.md).
 
+## Slider-Formate
+
+Small 1440 × 1440, Medium 1600 × 560, Large 3200 × 1120: siehe [`slider/`](slider/README.md).
+
 ## Neu bauen
 
 ```bash

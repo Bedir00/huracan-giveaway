@@ -6,7 +6,8 @@
 //   node render.js --still <out.png> <t|hold> single frame (t in seconds, or the settled HOLD state)
 //
 // ANIM_HTML=<path> selects another composition (default: animation.html next to this file).
-// Canvas size and centre point come from window.ANIM (W, H, CX, CY; default 1080 square).
+// Canvas size and centre point come from window.ANIM (W, H, CX, CY; default 1080 square), in CSS px.
+// DPR=<factor> renders the same layout at a higher pixel density (e.g. 1600x560 layout, DPR=2 -> 3200x1120).
 //
 // Before rendering, every line is centred optically: the real ink of each line is
 // measured from a transparent screenshot and shifted onto the centre axis, so side
@@ -15,6 +16,7 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
+const DPR = parseFloat(process.env.DPR || '1');
 const cx = b => (b.x0 + b.x1) / 2;
 const cy = b => (b.y0 + b.y1) / 2;
 
@@ -46,7 +48,7 @@ async function inkBox(page, stage, sel) {
     return { x0, y0, x1: x1 + 1, y1: y1 + 1 };
   }, png.toString('base64')).then(b => {
     if (b.x1 <= b.x0 || b.y1 <= b.y0) throw new Error(`Kalibrierung: ${sel} hat keine sichtbaren Pixel`);
-    return b;
+    return { x0: b.x0 / DPR, y0: b.y0 / DPR, x1: b.x1 / DPR, y1: b.y1 / DPR };   // back to CSS px
   });
 }
 
@@ -72,9 +74,11 @@ async function calibrate(page, stage, log, CX, CY) {
   const t = await inkBox(page, stage, '#codeText');
   await shift(page, '#codeText', 'left', cx(box) - cx(t));
   await shift(page, '#codeText', 'top', cy(box) - cy(t));
-  // 3. block from the cap line of CYBER MONDAY to the bottom of the code box: centred on y = CY
+  // 3. block from the cap line of CYBER MONDAY to the bottom of the code box (or of ANIM.BOTTOM,
+  //    e.g. a logo placed under the button): centred on y = CY
+  const bottomSel = await page.evaluate(() => window.ANIM.BOTTOM || '#codebox');
   const top = (await inkBox(page, stage, '#eyebrowText')).y0;
-  const bottom = (await rect(page, '#codebox')).y1;
+  const bottom = (await rect(page, bottomSel)).y1;
   await shift(page, '#copy', 'top', CY - (top + bottom) / 2);
 
   if (log) {
@@ -82,8 +86,8 @@ async function calibrate(page, stage, log, CX, CY) {
     for (const sel of ['#eyebrowText', '#headline', '#sub', '#logo']) rep.push(`${sel} ${(cx(await inkBox(page, stage, sel)) - CX).toFixed(1)}px`);
     const b = await rect(page, '#codebox'), c = await inkBox(page, stage, '#codeText');
     rep.push(`#codebox ${(cx(b) - CX).toFixed(1)}px`, `code text in box ${(cx(c) - cx(b)).toFixed(1)}/${(cy(c) - cy(b)).toFixed(1)}px`);
-    const tt = (await inkBox(page, stage, '#eyebrowText')).y0;
-    rep.push(`block y ${tt}..${b.y1.toFixed(0)} centre ${((tt + b.y1) / 2 - CY).toFixed(1)}px`);
+    const tt = (await inkBox(page, stage, '#eyebrowText')).y0, bb = (await rect(page, bottomSel)).y1;
+    rep.push(`block y ${tt}..${bb.toFixed(0)} centre ${((tt + bb) / 2 - CY).toFixed(1)}px`);
     console.log('Abweichung von der Mitte: ' + rep.join(' | '));
   }
 }
@@ -92,7 +96,7 @@ async function calibrate(page, stage, log, CX, CY) {
   const args = process.argv.slice(2);
   const html = path.resolve(process.env.ANIM_HTML || path.join(__dirname, 'animation.html'));
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1920, height: 1920 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1920 }, deviceScaleFactor: DPR });
   await page.goto('file://' + html);
   await page.waitForFunction(() => window.ANIM && window.ANIM.ready, null, { timeout: 15000 });
   const { T, HOLD, W = 1080, H = 1080, CX = W / 2, CY = H / 2 } = await page.evaluate(() => window.ANIM);
